@@ -2,6 +2,8 @@ import { Web3Provider } from "@ethersproject/providers";
 import WalletConnectProvider from "@walletconnect/web3-provider";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Web3Modal from "web3modal";
+import { ethers } from 'ethers'
+import { CCIPReadProvider } from '@chainlink/ethers-ccip-read-provider'
 
 // Enter a valid infura key here to avoid being rate limited
 // You can get a key for free at https://infura.io/register
@@ -34,7 +36,9 @@ function useWeb3Modal(config = {}) {
   // Open wallet selection modal.
   const loadWeb3Modal = useCallback(async () => {
     const newProvider = await web3Modal.connect();
-    setProvider(new Web3Provider(newProvider));
+    const web3Provider = new Web3Provider(newProvider)
+    var ccipProvider = new CCIPReadProvider(web3Provider);
+    setProvider(ccipProvider);
   }, [web3Modal]);
 
   const logoutOfWeb3Modal = useCallback(
